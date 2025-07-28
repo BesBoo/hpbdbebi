@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        emailjs.init('hlVOsu7aNJAlx2UKB'); // Thay bằng public key của bạn
+    </script>
+
     <title>Sách Chúc Mừng Sinh Nhật</title>
     <style>
         * {
@@ -688,75 +693,55 @@
             });
         }
 
-        async function sendChoice(choice,event) {
-            // Xác định đúng nút được nhấn
+        async function sendChoice(choice, event) {
             const clickedBtn = event.target;
             const buttons = document.querySelectorAll('.choice-btn');
 
-            // Chỉ hiển thị loading cho nút được nhấn
+            const originalText = clickedBtn.innerText.trim();
+
             clickedBtn.disabled = true;
             clickedBtn.innerHTML = '<div class="spinner"></div>Đang gửi...';
 
-            // Disable các nút khác (ẩn loading)
             buttons.forEach(btn => {
                 if (btn !== clickedBtn) btn.disabled = true;
             });
 
+            const messageText = `Nội dung được chọn: ${originalText}\n\nThời gian: ${new Date().toLocaleString('vi-VN')}\n\nCảm ơn bạn đã tạo ra cuốn sách sinh nhật tuyệt vời này!`;
+
             try {
-                const response = await fetch('/send-email', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        subject: 'Phản hồi từ sách sinh nhật 🎉',
-                        message: `Nội dung được chọn: ${clickedBtn.innerText.trim()}\n\nThời gian: ${new Date().toLocaleString('vi-VN')}\n\nCảm ơn bạn đã tạo ra cuốn sách sinh nhật tuyệt vời này!`
-                    })
+                const result = await emailjs.send('service_mzf7g9r', 'template_tg1i71h', {
+                    subject: 'Phản hồi từ sách sinh nhật 🎉',
+                    message: messageText
                 });
 
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    throw new Error('Server không trả về JSON. Có thể server đang gặp sự cố.');
-                }
-
-                const result = await response.json();
-                console.log('Server response:', result);
+                console.log('EmailJS response:', result);
 
                 const successBox = document.getElementById('successMessage');
+                const message = originalText;
+                successBox.innerHTML = `
+                    <h2>🎉 Gửi thành công! 🎉</h2>
+                    <p>Email đã được gửi thành công!</p>
+                    <p style="margin-top: 10px; font-size: 1.2rem;">👉 ${message}</p>
+                `;
+                successBox.style.display = 'block';
 
-                if (result.success) {
-                    const message = `Đi ăn ${choice.charAt(0).toUpperCase() + choice.slice(1)}`;
-                    successBox.innerHTML = `
-                        <h2>🎉 Gửi thành công! 🎉</h2>
-                        <p>Email đã được gửi thành công!</p>
-                        <p style="margin-top: 10px; font-size: 1.2rem;">👉 ${message}!</p>
-                    `;
-                    successBox.style.display = 'block';
-                } else {
-                    throw new Error(result.message || 'Gửi email thất bại');
-                }
-
-                // Ẩn thông báo và reset nút sau 4 giây
+                // 🔥 Ẩn 2 button sau khi gửi thành công
+                document.querySelector('.choice-buttons').style.display = 'none';
                 setTimeout(() => {
                     successBox.style.display = 'none';
-                    buttons.forEach((btn, index) => {
-                        btn.disabled = false;
-                        btn.innerHTML = index === 0 ? 'Jopi' : 'Doki';
-                    });
                 }, 4000);
 
             } catch (error) {
-                console.error('Lỗi:', error);
+                console.error('Lỗi khi gửi bằng EmailJS:', error);
 
                 const successBox = document.getElementById('successMessage');
                 successBox.innerHTML = `
                     <h2>❌ Có lỗi xảy ra</h2>
                     <p>Không thể gửi email. Vui lòng thử lại!</p>
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">${error.message}</p>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">${error.text || error.message}</p>
                 `;
                 successBox.style.display = 'block';
 
-                // Reset tất cả nút sau 4 giây
                 setTimeout(() => {
                     successBox.style.display = 'none';
                     buttons.forEach((btn, index) => {
@@ -766,6 +751,8 @@
                 }, 4000);
             }
         }
+
+
 
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
