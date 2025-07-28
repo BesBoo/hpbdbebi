@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <script>
         emailjs.init('hlVOsu7aNJAlx2UKB'); // Thay bằng public key của bạn
     </script>
@@ -17,7 +18,7 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
+            font-family:  'Times New Roman', sans-serif;
             background: linear-gradient(135deg, #fce4ec 0%, #e3f2fd 50%, #ffffff 100%);
             min-height: 100vh;
             display: flex;
@@ -108,18 +109,18 @@
             margin: 50px;
         }
 
-        /* Book Cover */
+        /* Bìa cuốn sách */
         .book-cover {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #654321 100%);
+            background: white;
             border-radius: 10px;
-            border: 3px solid #654321;
+            border: 3px solid rgb(130, 238, 255);
             box-shadow: 
-                0 0 0 2px #8B4513,
-                0 10px 30px rgba(0,0,0,0.5),
-                inset 0 2px 10px rgba(255,255,255,0.1);
+                0 0 0 2px #ff9be6,
+                0 10px 30px rgba(151, 249, 223, 0.5),
+                inset 0 2px 10px rgba(142, 227, 248, 0.1);
             transform-origin: left center;
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -129,8 +130,11 @@
         .book-cover.open {
             transform: rotateY(-180deg);
         }
+        .page-content.hidden {
+            visibility: hidden;
+        }
 
-        /* Pages */
+        /* trang bên trong */
         .page {
             position: absolute;
             width: 100%;
@@ -178,7 +182,7 @@
             font-size: 2.5rem;
             margin-bottom: 25px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            font-family: 'Georgia', serif;
+            font-family: 'Times New Roman', sans-serif;
             font-weight: bold;
             width: 100%;
             text-align: center;
@@ -188,7 +192,7 @@
             color: #1976d2;
             font-size: 1.8rem;
             margin-bottom: 20px;
-            font-family: 'Georgia', serif;
+            font-family: 'Times New Roman', sans-serif;
             width: 100%;
             text-align: center;
         }
@@ -199,7 +203,7 @@
             line-height: 1.8;
             margin-bottom: 15px;
             max-width: 85%;
-            font-family: 'Georgia', serif;
+            font-family: 'Times New Roman', sans-serif;
             width: 100%;
             text-align: center;
         }
@@ -454,8 +458,10 @@
             <!-- Book Cover -->
             <div class="book-cover" id="bookCover">
                 <div class="page-content">
-                    <h1>🎉 Sách Sinh Nhật 🎉</h1>
-                    <p>Click mũi tên bên phải để mở sách</p>
+                    <h1> Chúc Mừng Sinh Nhật</h1>
+                    <p>🎉Bé bi thúi🎉</p>
+                    <p> Click mũi thên bên phải để mở sách nho</p>
+
                 </div>
             </div>
 
@@ -538,7 +544,7 @@
                     <p class="typing-text">Cảm ơn bạn đã đọc hết cuốn sách nhỏ này!</p>
                     <p class="typing-text">Hãy chọn một trong hai nút bên dưới để gửi phản hồi nhé!</p>
                     <div class="choice-buttons">
-                        <button class="choice-btn" onclick="sendChoice('jopi', event)">Jopi ngon ngon ngon</button>
+                        <button class="choice-btn" onclick="sendChoice('jopi', event)">Jopi</button>
                         <button class="choice-btn" onclick="sendChoice('doki', event)">đi chụp hình, sau đó đi ăn doki</button>
                     </div>
                     <div class="page-number">9/9</div>
@@ -549,11 +555,20 @@
 
     <!-- Success Message -->
     <div class="success-message" id="successMessage">
-        <h2>🎉 Cảm ơn bạn! 🎉</h2>
-        <p>Lựa chọn của bạn đã được ghi nhận!</p>
+        <h2> Cảm ơn bé bi ❤ </h2>
+        <p>Anh bic ngay bé sẽ chọn này mà hihi</p>
     </div>
 
     <script>
+        function normalizeTextContent() {
+            document.querySelectorAll('*').forEach(el => {
+                if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                    el.textContent = el.textContent.normalize("NFC");
+                }
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", normalizeTextContent);
         let currentPage = 0; // 0 = closed, 1-9 = pages
         const totalPages = 9;
         let pages = [];
@@ -603,19 +618,28 @@
                 rightArrow.classList.remove('disabled');
             }
         }
+        
 
         function nextPage() {
             if (typingAnimationInProgress || currentPage >= totalPages) return;
 
             if (currentPage === 0) {
-                // Open the book
+                // Ẩn nội dung trang bìa khi mở sách
+                const coverContent = bookCover.querySelector('.page-content');
+                if (coverContent) coverContent.classList.add('hidden');
+
+                // Mở sách
                 bookCover.classList.add('open');
                 currentPage = 1;
                 showPage(1);
+
+
             } else if (currentPage < totalPages) {
-                // Flip to next page
-                const currentPageElement = pages[currentPage - 1];
-                currentPageElement.classList.add('flipped');
+                const prevPageElement = pages[currentPage - 1];
+                const prevContent = prevPageElement.querySelector('.page-content');
+                if (prevContent) prevContent.classList.add('hidden'); // Ẩn nội dung trước
+
+                prevPageElement.classList.add('flipped');
                 currentPage++;
                 if (currentPage <= totalPages) {
                     showPage(currentPage);
@@ -625,34 +649,45 @@
             updateArrows();
         }
 
+
         function previousPage() {
             if (typingAnimationInProgress || currentPage <= 0) return;
 
             if (currentPage === 1) {
-                // Close the book
+                 // Hiện lại nội dung trang bìa khi đóng sách
+                const coverContent = bookCover.querySelector('.page-content');
+                if (coverContent) coverContent.classList.remove('hidden');
+
+                // Đóng sách
                 bookCover.classList.remove('open');
                 hidePage(1);
                 currentPage = 0;
             } else if (currentPage > 1) {
-                // Flip to previous page
                 hidePage(currentPage);
                 currentPage--;
                 const pageElement = pages[currentPage - 1];
                 pageElement.classList.remove('flipped');
+
+                const content = pageElement.querySelector('.page-content');
+                if (content) content.classList.remove('hidden'); // Hiện lại nội dung khi lật ngược
             }
 
             updateArrows();
         }
 
+
         function showPage(pageNum) {
             const page = pages[pageNum - 1];
             page.style.display = 'block';
-            
-            // Only animate typing if this page hasn't been typed before
+
+            const content = page.querySelector('.page-content');
+            if (content) content.classList.remove('hidden'); // Hiện lại nếu cần
+
             if (!typedPages.has(pageNum)) {
                 startTypingAnimation(page, pageNum);
             }
         }
+
 
         function hidePage(pageNum) {
             const page = pages[pageNum - 1];
@@ -662,36 +697,39 @@
         function startTypingAnimation(page, pageNum) {
             typingAnimationInProgress = true;
             const typingElements = page.querySelectorAll('.typing-text');
-            
+            let index = 0;
+
             // Reset all text elements
             typingElements.forEach(el => {
                 el.classList.remove('active', 'typing-complete');
                 el.style.width = '0';
             });
 
-            // Animate each element sequentially
-            let delay = 0;
-            typingElements.forEach((el, index) => {
+            // Gõ từng dòng tuần tự
+            function typeNext() {
+                if (index >= typingElements.length) {
+                    typingAnimationInProgress = false;
+                    typedPages.add(pageNum);
+                    return;
+                }
+
+                const el = typingElements[index];
+                el.classList.add('active');
+
+                // Tính thời gian typing dựa trên chiều dài nội dung (hoặc cố định như cũ)
+                const typingDuration = 1500;
+
                 setTimeout(() => {
-                    el.classList.add('active');
-                    
-                    // After typing animation completes, allow text wrapping
-                    setTimeout(() => {
-                        el.classList.remove('active');
-                        el.classList.add('typing-complete');
-                        
-                        // If this is the last element, mark animation as complete
-                        if (index === typingElements.length - 1) {
-                            setTimeout(() => {
-                                typingAnimationInProgress = false;
-                                typedPages.add(pageNum);
-                            }, 100);
-                        }
-                    }, 750); // Match the CSS animation duration
-                }, delay);
-                delay += 300; // Delay between each element
-            });
+                    el.classList.remove('active');
+                    el.classList.add('typing-complete');
+                    index++;
+                    typeNext(); // Gọi dòng tiếp theo
+                }, typingDuration);
+            }
+
+            typeNext(); // Bắt đầu gõ dòng đầu tiên
         }
+
 
         async function sendChoice(choice, event) {
             const clickedBtn = event.target;
@@ -706,11 +744,11 @@
                 if (btn !== clickedBtn) btn.disabled = true;
             });
 
-            const messageText = `Nội dung được chọn: ${originalText}\n\nThời gian: ${new Date().toLocaleString('vi-VN')}\n\nCảm ơn bạn đã tạo ra cuốn sách sinh nhật tuyệt vời này!`;
+            const messageText = `Lịch trình hôm nay: ${originalText}\n\nĐi đón bé bi thúi thôi nào!`;
 
             try {
                 const result = await emailjs.send('service_mzf7g9r', 'template_tg1i71h', {
-                    subject: 'Phản hồi từ sách sinh nhật 🎉',
+                    subject: 'Plan bé bi đã chọn 🎉',
                     message: messageText
                 });
 
@@ -719,13 +757,12 @@
                 const successBox = document.getElementById('successMessage');
                 const message = originalText;
                 successBox.innerHTML = `
-                    <h2>🎉 Gửi thành công! 🎉</h2>
-                    <p>Email đã được gửi thành công!</p>
-                    <p style="margin-top: 10px; font-size: 1.2rem;">👉 ${message}</p>
+                    
+                    <p>Anh bic em sẽ chọn này mà</p>
+                    
                 `;
                 successBox.style.display = 'block';
 
-                // 🔥 Ẩn 2 button sau khi gửi thành công
                 document.querySelector('.choice-buttons').style.display = 'none';
                 setTimeout(() => {
                     successBox.style.display = 'none';
@@ -737,7 +774,7 @@
                 const successBox = document.getElementById('successMessage');
                 successBox.innerHTML = `
                     <h2>❌ Có lỗi xảy ra</h2>
-                    <p>Không thể gửi email. Vui lòng thử lại!</p>
+                    <p>Anh hong nhận được thông tin ròi hic hic</p>
                     <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">${error.text || error.message}</p>
                 `;
                 successBox.style.display = 'block';
