@@ -78,7 +78,7 @@
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #f8bbd9, #bbdefb);
+            background: linear-gradient(45deg, #bbdefb, #f8bbd9);
             color: #ad1457;
             border: none;
             padding: 12px 30px;
@@ -107,6 +107,7 @@
             position: relative;
             transform-style: preserve-3d;
             margin: 50px;
+            z-index: 10;
         }
 
         /* Bìa cuốn sách */
@@ -189,6 +190,14 @@
         }
 
         .page-content h2 {
+            color: #f89ad2;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', sans-serif;
+            width: 100%;
+            text-align: center;
+        }
+        .page-content h3 {
             color: #1976d2;
             font-size: 1.8rem;
             margin-bottom: 20px;
@@ -196,7 +205,6 @@
             width: 100%;
             text-align: center;
         }
-
         .page-content p {
             color: #444;
             font-size: 1.1rem;
@@ -432,17 +440,61 @@
                 font-size: 1rem;
             }
         }
+        .heart {
+            width: 20px;
+            height: 20px;
+            background-color: pink;
+            position: fixed;
+            top: -10px;
+            
+            transform: rotate(-45deg);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 20px;
+            height: 20px;
+            background-color: pink;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+        .heart::after {
+            left: -10px;
+            top: 0;
+        }
+
+        /* Animation rơi và mờ dần */
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) scale(0.8) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+
+
     </style>
 </head>
 <body>
     <!-- Password Modal -->
     <div class="password-modal" id="passwordModal">
         <div class="password-box">
-            <h2>🎂 Nhập Mật Khẩu 🎂</h2>
-            <input type="text" class="password-input" id="passwordInput" placeholder="Nhập mật khẩu...">
-            <button class="submit-btn" onclick="checkPassword()">Xác Nhận</button>
+            <h2> Nhập Mật Khẩu </h2>
+            <input type="text" class="password-input" id="passwordInput" placeholder="Hôm nay là ngày mấy ta ?">
+            <button class="submit-btn" onclick="checkPassword()">Let's go</button>
         </div>
     </div>
+
 
     <!-- Book Container -->
     <div class="book-container" id="bookContainer">
@@ -459,7 +511,7 @@
             <div class="book-cover" id="bookCover">
                 <div class="page-content">
                     <h1> Chúc Mừng Sinh Nhật</h1>
-                    <p>🎉Bé bi thúi🎉</p>
+                    <h3>🎉Bé bi thúi🎉</h3>
                     <p> Click mũi thên bên phải để mở sách nho</p>
 
                 </div>
@@ -469,83 +521,91 @@
             <div class="page" data-page="1" style="z-index: 10;">
                 <div class="page-content">
                     <h1 class="typing-text">🎉 Chúc Mừng Sinh Nhật! 🎉</h1>
-                    <p class="typing-text">Cuốn sách nhỏ này dành riêng cho bạn</p>
-                    <p class="typing-text">Chúc bạn có một ngày sinh nhật thật đặc biệt!</p>
+                    <p class="typing-text">Cuốn sách nhỏ này dành riêng cho bé đó</p>
+                    <p class="typing-text">Chúc bé có một ngày sinh nhật thật đặc biệt!</p>
                     <div class="page-number">1/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="2" style="z-index: 9;">
                 <div class="page-content">
-                    <h2 class="typing-text">💝 Lời Chúc Đầu Tiên</h2>
-                    <p class="typing-text">Mong rằng tuổi mới sẽ mang đến cho bạn nhiều niềm vui, hạnh phúc và thành công.</p>
-                    <p class="typing-text">Bạn xứng đáng nhận được tất cả những điều tốt đẹp nhất!</p>
+                    <h2 class="typing-text">💝Ngày Của Thiên Thần</h2>
+                    <p class="typing-text"> Hôm nay là 1 ngày vô cùng đặc biệt,</p>
+                    <p class="typing-text"> ngày mà thiên thần nhỏ của anh chào đời</p>
+                    <p class="typing-text"> tuổi mới chúc em lun mạnh khỏe, </p>
+                    <p class="typing-text"> xinh đẹp và xua tan hết bùn phiền.</p>
+
                     <div class="page-number">2/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="3" style="z-index: 8;">
                 <div class="page-content">
-                    <h2 class="typing-text">🌟 Ước Mơ Và Hi Vọng</h2>
-                    <p class="typing-text">Chúc tất cả những ước mơ của bạn sẽ trở thành hiện thực!</p>
-                    <p class="typing-text">Mong bạn luôn tự tin và mạnh mẽ trên con đường phía trước.</p>
+                    <h2 class="typing-text">🌟 Niềm Vui Tuổi Mới</h2>
+                    <p class="typing-text">Chúc em bé của anh tủi mới lun vui vẻ và hạnh phúc.</p>
+                    <p class="typing-text">Mong em lun đạt được những dự định trong tương lai.</p>
                     <div class="page-number">3/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="4" style="z-index: 7;">
                 <div class="page-content">
-                    <h2 class="typing-text">❤️ Tình Yêu Và Tình Bạn</h2>
-                    <p class="typing-text">Chúc bạn được bao quanh bởi tình yêu thương của gia đình và bạn bè.</p>
-                    <p class="typing-text">Những người thân yêu sẽ luôn ở bên cạnh bạn trong mọi khoảnh khắc.</p>
+                    <h2 class="typing-text">❤️ Tình Yêu </h2>
+                    <p class="typing-text">Anh sẽ lun ở bên em, hong chỉ trong những ngày vui </p>
+                    <p class="typing-text">mà còn trong những lúc khó khăn nữa nha</p>
+                    <p class="typing-text">Mình sẽ cùng nhau vượt qua ha</p>
                     <div class="page-number">4/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="5" style="z-index: 6;">
                 <div class="page-content">
-                    <h2 class="typing-text">🍀 May Mắn Và Thành Công</h2>
-                    <p class="typing-text">Chúc bạn gặp nhiều may mắn trong công việc và cuộc sống!</p>
-                    <p class="typing-text">Mọi nỗ lực của bạn sẽ được đền đáp xứng đáng.</p>
+                    <h3 class="typing-text">Đặc biệt là </h3>
+                    <h3 class="typing-text">cùng nhau trong lúc làm tình nữa hihi.</h3>       
                     <div class="page-number">5/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="6" style="z-index: 5;">
                 <div class="page-content">
-                    <h2 class="typing-text">☀️ Ánh Sáng Và Năng Lượng</h2>
-                    <p class="typing-text">Chúc bạn luôn tràn đầy năng lượng tích cực!</p>
-                    <p class="typing-text">Nụ cười của bạn sẽ là ánh sáng sưởi ấm trái tim mọi người xung quanh.</p>
+                    <h2 class="typing-text">Anh yêu em rất nhìu và sẽ lun ở bên em.</h2>
+                    
                     <div class="page-number">6/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="7" style="z-index: 4;">
                 <div class="page-content">
-                    <h2 class="typing-text">🌈 Màu Sắc Cuộc Sống</h2>
-                    <p class="typing-text">Chúc cuộc sống của bạn luôn rực rỡ như cầu vồng!</p>
-                    <p class="typing-text">Mỗi ngày mới sẽ mang đến những trải nghiệm thú vị và bất ngờ.</p>
+                    <p class="typing-text">Chúc em 1 sinh nhật thật ngọt ngào và vui vẻ,</p>
+                    <p class="typing-text">Mong là năm sau </p>
+                    <p class="typing-text">và những năm sau nữa vẫn sẽ là anh đón tủi mới cùng em</p>
                     <div class="page-number">7/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="8" style="z-index: 3;">
                 <div class="page-content">
-                    <h2 class="typing-text">🌸 Tuổi Mới Tươi Đẹp</h2>
-                    <p class="typing-text">Chúc tuổi mới của bạn nở rộ như những bông hoa xuân!</p>
-                    <p class="typing-text">Bạn sẽ ngày càng xinh đẹp, trưởng thành và hoàn thiện bản thân.</p>
+                    <h2 class="typing-text"> Love you babi ❤ </h2>
                     <div class="page-number">8/9</div>
                 </div>
             </div>
 
             <div class="page" data-page="9" style="z-index: 2;">
                 <div class="page-content">
-                    <h2 class="typing-text">🎊 Lời Chúc Cuối Cùng</h2>
-                    <p class="typing-text">Cảm ơn bạn đã đọc hết cuốn sách nhỏ này!</p>
-                    <p class="typing-text">Hãy chọn một trong hai nút bên dưới để gửi phản hồi nhé!</p>
+                    <p class="typing-text">Hết ròi </p>
+                    <p class="typing-text">Cảm ơn bé đã đọc hết cuốn sách nhỏ này!</p>
+                    <p class="typing-text">Giờ thì, em mún hnay thế nào nà</p>
                     <div class="choice-buttons">
-                        <button class="choice-btn" onclick="sendChoice('jopi', event)">Jopi</button>
-                        <button class="choice-btn" onclick="sendChoice('doki', event)">đi chụp hình, sau đó đi ăn doki</button>
+                        <button class="choice-btn" onclick="sendChoice('jopi', event)">
+                            Jopi, 
+                            sau đó minh đi ra công viên đụ nhau,
+                            sau đó mình đi về
+                         </button>
+                        <button class="choice-btn" onclick="sendChoice('doki', event)">
+                            đi chụp hình, sau đó đi ăn doki, 
+                            sau đó mình đi dạo , tiếp theo mình đi đụ
+                            sau đó mình về nhà đụ nhau típ
+                        </button>
                     </div>
                     <div class="page-number">9/9</div>
                 </div>
@@ -584,7 +644,7 @@
                 document.getElementById('bookContainer').style.display = 'block';
                 initializeBook();
             } else {
-                alert('Mật khẩu không đúng! Vui lòng thử lại.');
+                alert('Sai mất ròi! \nThử lại với 1008 xem nà.');
                 document.getElementById('passwordInput').value = '';
             }
         }
@@ -717,7 +777,7 @@
                 el.classList.add('active');
 
                 // Tính thời gian typing dựa trên chiều dài nội dung (hoặc cố định như cũ)
-                const typingDuration = 1500;
+                const typingDuration = 1000;
 
                 setTimeout(() => {
                     el.classList.remove('active');
@@ -764,6 +824,13 @@
                 successBox.style.display = 'block';
 
                 document.querySelector('.choice-buttons').style.display = 'none';
+                const lastPageContent = pages[totalPages - 1].querySelector('.page-content');
+                if (lastPageContent) {
+                    lastPageContent.innerHTML = `
+                        <h2 style="color: #ad1457; font-size: 2rem;">Giờ thì, cbi đón bé bi thoi</h2>
+                        <div class="page-number">9/9</div>
+                    `;
+                }
                 setTimeout(() => {
                     successBox.style.display = 'none';
                 }, 4000);
@@ -802,12 +869,34 @@
             }
         });
 
-        // Enter key for password
+
         document.getElementById('passwordInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
             }
         });
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+
+            // Thời gian rơi ngẫu nhiên
+            const duration = Math.random() * 3 + 3; // 3s – 6s
+            heart.style.animationDuration = duration + 's';
+            heart.style.opacity = 0.8;
+
+            const scale = Math.random() * 0.5 + 0.5;
+            heart.style.transform = `scale(${scale}) rotate(45deg)`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+        setInterval(createHeart, 500);
+
+
+
     </script>
 </body>
 </html>
