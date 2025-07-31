@@ -18,14 +18,16 @@
         }
 
         body {
-            font-family:  'Times New Roman', sans-serif;
-            background: #FFFEFF;
+            font-family: 'Times New Roman', sans-serif;
+            background: rgba(255, 255, 255, 0.95);
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
         }
+
 
         /* Password Modal */
         .password-modal {
@@ -34,7 +36,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background:url('background.png') no-repeat center center fixed;
+            background-size: 100% 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -43,12 +46,12 @@
         }
 
         .password-box {
-            background: rgba(255, 255, 255, 0.15); /* trong suốt nhẹ */
-            backdrop-filter: blur(15px); /* làm mờ nền phía sau */
+            background: rgba(116, 116, 116, 0); 
+            backdrop-filter: blur(4px); 
             -webkit-backdrop-filter: blur(15px);
             padding: 40px;
             border-radius: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3); /* border trắng mờ */
+            border: 3px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             text-align: center;
             max-width: 90%;
@@ -56,7 +59,8 @@
         }
 
         .password-box h2 {
-            color:#C41E61;
+            color:#ffc9df;
+            -webkit-text-stroke: 1px #c04a93;
             margin-bottom: 20px;
             font-size: clamp(1.5rem, 4vw, 2rem);
         }
@@ -69,7 +73,7 @@
             font-size: 18px;
             text-align: center;
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgb(255, 255, 255);
             outline: none;
             transition: all 0.3s ease;
         }
@@ -109,7 +113,7 @@
 
         .book {
             width: 600px;
-            height: 400px;
+            height: 500px;
             position: relative;
             transform-style: preserve-3d;
             margin: 50px;
@@ -674,7 +678,7 @@
         let bookCover;
         let leftArrow, rightArrow;
         let typingAnimationInProgress = false;
-        let typedPages = new Set(); // Track which pages have been typed
+        let typedPages = new Set(); 
 
         
         function checkPassword() {
@@ -684,12 +688,11 @@
                 message: ''
             };
 
-            if (password === '260720044') {
+            if (password === '20040810') {
                 document.getElementById('passwordModal').style.display = 'none';
                 document.getElementById('bookContainer').style.display = 'block';
                 initializeBook();
 
-                // Gửi email khi đăng nhập thành công
                 emailParams.subject = ' Đăng nhập thành công';
                 emailParams.message = 'Đã có người đăng nhập thành công vào trang chúc mừng sinh nhật.';
 
@@ -697,12 +700,10 @@
                 alert('Sai mất ròi! ');
                 document.getElementById('passwordInput').value = '';
 
-                // Gửi email khi đăng nhập thất bại
                 emailParams.subject = ' Đăng nhập thất bại';
                 emailParams.message = 'Đã có người cố đăng nhập vào trang chúc mừng sinh nhật nhưng không thành công.';
             }
 
-            // Gửi email qua EmailJS
             emailjs.send('service_mzf7g9r', 'template_tg1i71h', emailParams)
                 .then(function(response) {
                     console.log('Thông báo đăng nhập đã gửi:', response.status, response.text);
@@ -710,6 +711,7 @@
                     console.error('Lỗi gửi thông báo đăng nhập:', error);
                 });
         }
+
 
         function initializeBook() {
             pages = document.querySelectorAll('.page');
@@ -746,7 +748,6 @@
             if (typingAnimationInProgress || currentPage >= totalPages) return;
 
             if (currentPage === 0) {
-                // Ẩn nội dung trang bìa khi mở sách
                 const coverContent = bookCover.querySelector('.page-content');
                 if (coverContent) coverContent.classList.add('hidden');
 
@@ -776,11 +777,9 @@
             if (typingAnimationInProgress || currentPage <= 0) return;
 
             if (currentPage === 1) {
-                 // Hiện lại nội dung trang bìa khi đóng sách
                 const coverContent = bookCover.querySelector('.page-content');
                 if (coverContent) coverContent.classList.remove('hidden');
 
-                // Đóng sách
                 bookCover.classList.remove('open');
                 hidePage(1);
                 currentPage = 0;
@@ -791,7 +790,7 @@
                 pageElement.classList.remove('flipped');
 
                 const content = pageElement.querySelector('.page-content');
-                if (content) content.classList.remove('hidden'); // Hiện lại nội dung khi lật ngược
+                if (content) content.classList.remove('hidden'); 
             }
 
             updateArrows();
@@ -803,7 +802,7 @@
             page.style.display = 'block';
 
             const content = page.querySelector('.page-content');
-            if (content) content.classList.remove('hidden'); // Hiện lại nếu cần
+            if (content) content.classList.remove('hidden'); 
 
             if (!typedPages.has(pageNum)) {
                 startTypingAnimation(page, pageNum);
@@ -827,7 +826,6 @@
                 el.style.width = '0';
             });
 
-            // Gõ từng dòng tuần tự
             function typeNext() {
                 if (index >= typingElements.length) {
                     typingAnimationInProgress = false;
@@ -838,7 +836,6 @@
                 const el = typingElements[index];
                 el.classList.add('active');
 
-                // Tính thời gian typing dựa trên chiều dài nội dung (hoặc cố định như cũ)
                 const typingDuration = 1000;
 
                 setTimeout(() => {
@@ -849,7 +846,7 @@
                 }, typingDuration);
             }
 
-            typeNext(); // Bắt đầu gõ dòng đầu tiên
+            typeNext(); 
         }
 
 
@@ -919,8 +916,6 @@
         }
 
 
-
-        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (document.getElementById('bookContainer').style.display === 'block') {
                 if (e.key === 'ArrowRight' || e.key === ' ') {
