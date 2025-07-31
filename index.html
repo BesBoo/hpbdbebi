@@ -657,6 +657,14 @@
                 alert('Không xem source code được đâu bé ơi!');
             }
         });
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey && e.key === 'u') || 
+                (e.ctrlKey && e.key === 's') || 
+                (e.key === 'F12')) {
+                e.preventDefault();
+                alert('Không được xem mã nguồn nha bé ơi 💻🔒');
+            }
+        });
 
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
